@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head th:replace="fragments :: header">
+</head>
+<body>
+<div class="d-flex flex-column">
+    <div th:replace="fragments :: navbar"></div>
+
+    <div class="container">
+        <div class="display-4 text-center my-3">Innovation ändern</div>
+        <form method="post" th:action="@{'/postEditedInnovation/' + ${innovation.id}}" th:object="${innovation}" enctype="multipart/form-data">
+            <div class="form-group row">
+                <label class="col-md-2 col-form-lable">Titel</label>
+                <div class="col-md-10">
+                    <input type="text" class="form-control" th:field="*{titel}" th:errorclass="is-invalid">
+                    <div class="text-danger small" th:errors="*{titel}"></div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-md-2 col-form-lable">Beschreibung</label>
+                <div class="col-md-10">
+                    <textarea class="form-control" th:field="*{beschreibung}" rows="10"></textarea>
+                </div>
+            </div>
+
+            <div class="form-group-row text-right">
+                <button type="submit" class="btn btn-primary col-sm-auto" onclick="return confirm('Innovation speichern?');">Speichern</button>
+            </div>
+
+        </form>
+
+    </div>
+</div>
+<th:block th:replace="fragments :: scripts"/>
+<script>
+var submitted = false;
+var userinput = false;
+
+$(document).ready(function() {
+  $("form").submit(function() {
+    submitted = true;
+  });
+
+  $("input").change(function() {
+    userinput = true;
+  });
+
+  window.onbeforeunload = function () {
+    if (userinput && !submitted) {
+      return 'You do not have submitted the form yet.\
+      Do you really want to leave this page?';
+    }
+  }
+});
+
+</script>
+</body>
+</html>

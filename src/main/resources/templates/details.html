@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <div th:replace="fragments :: header"></div>
+    <title>Ihre ausgewählte Innovation</title>
+</head>
+<body>
+<div th:replace="fragments :: navbar"></div>
+
+<div class="container">
+    <p class="text-center mt-3 alert alert-primary" th:text="${message2}" th:if="${message2 ne null}"></p>
+    <p class="text-center mt-3 alert alert-primary" th:text="${message}" th:if="${message ne null}"></p>
+    <div class="dropdown mb-2">
+        <a class="d-inline-flex text-reset text-decoration-none" id="titleDropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <span class="display-4" th:text="${innovation.titel}"></span>
+            <i class="fas fa-caret-down fa-lg ml-3 mt-2 align-self-center"></i>
+        </a>
+        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="titleDropdown">
+            <a class="dropdown-item" th:href="@{'/editInnovation/' + ${innovation.id}}">
+                <i class="fas fa-edit"></i>
+                Bearbeiten
+            </a>
+            <a th:unless="${bereitsBewertet or maxBewertungenErreicht}" class="dropdown-item" th:href="@{'/rating2/' + ${innovation.id}}">
+                <i class="far fa-star"></i>
+                Bewerten
+            </a>
+            <a th:if="${bereitsBewertet}" class="dropdown-item" th:href="@{'/editRating/' + ${innovation.id}}">
+                <i class="far fa-star"></i>
+                Bewertung ändern
+            </a>
+            <a class="dropdown-item" th:href="@{'/deleteInnovation/' + ${innovation.id}}" onclick="return confirm('Soll diese Innovation gelöscht werden?');">
+                <i class="fas fa-trash-alt"></i>
+                Löschen
+            </a>
+            <a class="dropdown-item" th:href="@{'/vergleichen/' + ${innovation.id}}">
+                <i class="fas fa-clipboard-list"></i>
+                Vergleichen
+            </a>
+            <button type="button" class="dropdown-item" data-toggle="modal" data-target="#uploadModal">
+                <i class="fas fa-upload"></i>
+                Datei Upload
+            </button >
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="uploadModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="uploadModalLabel">Datei Upload</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form method="post" th:action="@{'/upload/' + ${innovation.id}}" enctype="multipart/form-data">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <input type="file" name="file" class="form-control-file">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Upload</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col"><h5>Beschreibung</h5></div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-12 col-md-6">
+            <p th:text="${innovation.beschreibung}"></p>
+        </div>
+        <div th:if="${innovation.bewertung}" class="col-6 chartContainer" style = "height:40vh; width:40vw" margin = "80px">
+            <canvas id="radarChart"></canvas>
+        </div>
+        <div th:unless="${innovation.bewertung}" class="col-6" >
+            Diese Innovation wurde noch nicht bewertet.
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12 col-md-6 order-2 order-md-1 mb-3 pr-5">
+            <div><h5>Dateien</h5></div>
+            <table class="table table-hover">
+                <tbody>
+                    <tr th:each="anhang : ${innovation.getAnhaenge()}">
+                        <td> <span th:text="${anhang.getName()}"></span> </td>
+                        <td> <a th:href="@{'/downloadAnhang/' + ${anhang.getId}}"> <i class="fas fa-download"></i> </a> </td>
+                        <td>
+                            <a th:href="'#fileInfoModal' + ${anhang.getId}" type="button" data-toggle="modal" th:data-target="'#fileInfoModal' + ${anhang.getId}">
+                                <i class="fas fa-info"></i>
+                            </a>
+                        </td>
+                        <td> <a th:href="@{'/deleteAnhang/' + ${innovation.id} + '/' + ${anhang.getId}}"> <i class="fas fa-trash-alt"></i> </a> </td>
+
+                        <div class="modal fade" th:id="'fileInfoModal' + ${anhang.getId}" tabindex="-1" role="dialog" aria-labelledby="fileInfoModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="fileInfoModalLabel">Datei Infos</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="col">
+                                            <div class="row">
+                                                <div class="col">Dateiname:</div>
+                                                <div class="col"> <span th:text="${anhang.getName()}"></span></div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col">Größe (MB):</div>
+                                                <div class="col"><span th:text="${anhang.getSize()}"></span></div>
+
+                                            </div>
+                                            <div class="row">
+                                                <div class="col">Dateityp:</div>
+                                                <div class="col"><span th:text="${anhang.getTyp()}"></span></div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col">Erstellt am:</div>
+                                                <div class="col"><span th:text="${anhang.getErstellungsdatumString()}"></span></div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col">Ersteller:</div>
+                                                <div class="col"><span th:text="${anhang.getErsteller.getName()}"></span></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="col-12 col-md-6 order-1 order-md-2 mb-3" th:if="${innovation.bewertung}">
+            <div class="row">
+                <div class="col"><b>&empty; Potenzial :</a> </b></div>
+                <div class="col"><b><span th:text="${innovation.durchschnittsBewertung.gesamtRating}"></span></b></div>
+            </div>
+            <div class="row">
+                <span class="col">
+                    <a data-toggle="collapse" href="#collapseBewertung" role="button" aria-expanded="false" aria-controls="collapseBewertung">
+                        Detaillierte Bewertung
+                        <i class="fas fa-caret-down fa-lg ml-3 mt-2 align-self-center"></i>
+                    </a>
+                </span>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="collapse" id="collapseBewertung">
+                        <div class="card card-body">
+                            <div class="row">
+                                <div class="col"><b>Anzahl <a  role="button" th:href="@{'/multipleRatings/' + ${innovation.id}}">  <u>Bewertungen</u>  </a> </b></div>
+                                <div class="col"><b><span th:text="${innovation.getAnzahlBewertungen}"></span></b></div>
+                            </div>
+                            <div class="seperator" margin="50px"></div>
+                            <div class="row">
+                                <div class="col">Kriterium1:</div>
+                                <div class="col"><span th:text="${innovation.durchschnittsBewertung.kriterium1}"></span></div>
+                            </div>
+                            <div class="row">
+                                <div class="col">Kriterium2:</div>
+                                <div class="col"><span th:text="${innovation.durchschnittsBewertung.kriterium2}"></span></div>
+                            </div>
+                            <div class="row">
+                                <div class="col">Kriterium3:</div>
+                                <div class="col"><span th:text="${innovation.durchschnittsBewertung.kriterium3}"></span></div>
+                            </div>
+                            <div class="row">
+                                <div class="col">Kriterium4:</div>
+                                <div class="col"><span th:text="${innovation.durchschnittsBewertung.kriterium4}"></span></div>
+                            </div>
+                            <div class="row">
+                                <div class="col">Kriterium5:</div>
+                                <div class="col"><span th:text="${innovation.durchschnittsBewertung.kriterium5}"></span></div>
+                            </div>
+                            <div class="row">
+                                <div class="col">Kriterium6:</div>
+                                <div class="col"><span th:text="${innovation.durchschnittsBewertung.kriterium6}"></span></div>
+                            </div>
+                            <div class="row">
+                                <div class="col">Kriterium7:</div>
+                                <div class="col"><span th:text="${innovation.durchschnittsBewertung.kriterium7}"></span></div>
+                            </div>
+                            <div class="row mb-1">
+                                <div class="col">Kriterium8:</div>
+                                <div class="col"><span th:text="${innovation.durchschnittsBewertung.kriterium8}"></span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src = "https://cdn.jsdelivr.net/npm/chart.js@3.3.0/dist/chart.min.js"></script>
+<script type="text/javascript" th:src="@{/js/radarChart.js}"></script>
+<th:block th:replace="fragments :: scripts"/>
+<script th:inline = "javascript">
+
+var bew = /*[[${innovation.bewertungen}]]*/;
+var anzahlBewertungen = /*[[${innovation.getAnzahlBewertungen}]]*/;
+
+createRadarChart(anzahlBewertungen, bew, "Bewertungsvergleich");
+
+</script>
+<script>
+
+</script>
+
+
+
+</body>
+</html>

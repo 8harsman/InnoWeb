@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <div th:replace="fragments :: header"></div>
+    <title>Vergleich zweier Innovationen</title>
+</head>
+<body>
+<div th:replace="fragments :: navbar"></div>
+
+<div class="container">
+    <div class = "row d-flex justify-content-center">
+        <div class = "col">
+            <h1 class="display-4 text-center" th:text="${innovation.titel + ' ' + 'vs' + ' ' + innovation1.titel}"> </h1>
+        </div>
+    </div>
+    <div class="row d-flex justify-content-center mb-3">
+
+        <div th:if="${innovation.durchschnittsBewertung} or ${innovation1.durchschnittsBewertung}" class="col-6 chartContainer"
+             style = "height:80vh; width:80vw" margin = "80px">
+            <canvas id="radarChart"></canvas>
+        </div>
+        <div th:unless="${innovation.durchschnittsBewertung} or ${innovation1.durchschnittsBewertung}" class="col-6 mb-1" >
+            Diese Innovationen wurden noch nicht bewertet.
+        </div>
+    </div>
+
+    <div class="table-responsive" margin = "100px">
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th scope="col"></th>
+            <th scope="col">
+                <a th:text="${innovation.titel}" th:href="@{'/details/' + ${innovation.id}}" th:target="_blank"></a>
+            </th>
+            <th scope="col">
+                <a th:text="${innovation1.titel}" th:href="@{'/details/' + ${innovation1.id}}" th:target="_blank"></a>
+            </th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr>
+            <th scope = "row">Anzahl Bewertungen </th>
+            <td> <span th:text="${innovation.anzahlBewertungen}"></span> </td>
+            <td> <span th:text="${innovation1.anzahlBewertungen}"></span> </td>
+        </tr>
+        <tr>
+            <th scope = "row">Potenzial </th>
+            <td> <span th:text="${innovation.durchschnittsBewertung?.gesamtRating}"></span> </td>
+            <td> <span th:text="${innovation1.durchschnittsBewertung?.gesamtRating}"></span> </td>
+        </tr>
+        <tr>
+            <th scope = "row">Ersteller </th>
+            <td> <span th:text="${innovation.ersteller}"></span> </td>
+            <td> <span th:text="${innovation1.ersteller}"></span> </td>
+        </tr>
+        </tbody>
+    </table>
+    </div>
+    </div>
+
+
+<script src = "https://cdn.jsdelivr.net/npm/chart.js@3.3.0/dist/chart.min.js"></script>
+<script type="text/javascript" th:src="@{/js/radarChart.js}"></script>
+<th:block th:replace="fragments :: scripts"/>
+<script th:inline = "javascript">
+
+var inno1 = /*[[${innovation.durchschnittsBewertung}]]*/;
+var inno2 = /*[[${innovation1.durchschnittsBewertung}]]*/;
+var innos = [inno1, inno2]
+var filtered = innos.filter(function (el) {
+  return el != null;
+});
+
+var titel1 = /*[[${innovation.titel}]]*/;
+var titel2 = /*[[${innovation1.titel}]]*/;
+var titel =[titel1, titel2]
+var anzahl = filtered.length
+
+createRadarChart(anzahl, filtered, "Innovationsvergleich", titel);
+
+</script>
+</body>
+</html>

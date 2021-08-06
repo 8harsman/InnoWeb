@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <div th:replace="fragments :: header"></div>
+    <title>Bewertung ändern</title>
+</head>
+<body>
+<div th:replace="fragments :: navbar"></div>
+
+<div class="container">
+    <h1 class="display-4 my-3">Bewertung ändern</h1>
+    <form method="post" th:action="@{'/postEditedRating/' + ${id}}" th:object="${bewertung}">
+
+        <div class="alert alert-success text-center" role="alert"
+             th:if="${param.updated}">
+            <span>Erfolgreich gespeichert</span>
+        </div>
+        <h6 class = "my-5">Bewerten sie das Potenzial jeder Kategorie ihrer Innovation von 0 bis 5. </h6>
+        <div class="form-group mt-3 row">
+            <div class="col col-sm-6">
+                <div class="d-flex justify-content-sm-end">
+                    <h6> Niedrig <i class="fa fa-long-arrow-right"></i> Hoch: </h6>
+                </div>
+            </div>
+        </div>
+            <div class = " d-sm-flex-row justify-content-center">
+                <div class="form-group mt-3 row">
+                    <div class="col-xs-12 col-sm col-lg-4">
+                        <div class="d-sm-flex flex-row justify-content-between align-items-center">
+                            <span class="mr-1">Kriterium1</span>
+                        </div>
+                    </div>
+                    <div class="col col-sm-6">
+                        <input id="mk" type="text" th:field="*{kriterium1}" data-slider-min="0"
+                               data-slider-max="5"
+                               data-slider-step="1"
+                               th:attr="data-slider-value=${bewertung.getKriterium1()}" class="rating"/>
+                        <span class="ml-2"><strong id="mkVal" th:text="${#numbers.formatDecimal(bewertung.getKriterium1(), 0, 0)}">0</strong></span>
+                        <i class="far fa-question-circle d-none d-md-inline ml-4" data-toggle="tooltip" data-placement="top" title="Beschreibung"></i>
+                    </div>
+                </div>
+                <div class="form-group mt-3 row">
+                    <div class="col-xs-12 col-sm col-lg-4">
+                        <div class="d-sm-flex flex-row justify-content-between align-items-center">
+                            <span>Kriterium2</span>
+                        </div>
+                    </div>
+                    <div class="col col-sm-6">
+                        <input id="mt" type="text" th:field="*{kriterium2}" data-slider-min="0"
+                               data-slider-max="5"
+                               data-slider-step="1"
+                               th:attr="data-slider-value=${bewertung.getKriterium2()}" class="rating"/>
+                        <span class="ml-2"><strong id="mtVal" th:text="${#numbers.formatDecimal(bewertung.getKriterium2(), 0, 0)}">0</strong></span>
+                        <i class="far fa-question-circle d-none d-md-inline ml-4" data-toggle="tooltip" data-placement="top" title="Beschreibung"></i>
+                    </div>
+                </div>
+                <div class="form-group mt-3 row">
+                    <div class="col-xs-12 col-sm col-lg-4">
+                        <div class="d-sm-flex flex-row justify-content-between align-items-center">
+                            <span>Kriterium3</span>
+                        </div>
+                    </div>
+                    <div class="col col-sm-6">
+                        <input id="ht" type="text" th:field="*{kriterium3}" data-slider-min="0" data-slider-max="5"
+                               data-slider-step="1"
+                               th:attr="data-slider-value=${bewertung.getKriterium3()}" class="rating"/>
+                        <span class="ml-2"><strong id="htVal" th:text="${#numbers.formatDecimal(bewertung.getKriterium3(), 0, 0)}">0</strong></span>
+                        <i class="far fa-question-circle d-none d-md-inline ml-4" data-toggle="tooltip" data-placement="top" title="Beschreibung"></i>
+                    </div>
+                </div>
+                <div class="form-group mt-3 row">
+                    <div class="col-xs-12 col-sm col-lg-4">
+                        <div class="d-sm-flex flex-row justify-content-between align-items-center">
+                            <span>Kriterium4</span>
+                        </div>
+                    </div>
+                    <div class="col col-sm-6">
+                        <input id="e" type="text" th:field="*{kriterium4}" data-slider-min="0" data-slider-max="5"
+                               data-slider-step="1"
+                               th:attr="data-slider-value=${bewertung.getKriterium4()}" class="rating"/>
+                        <span class="ml-2"><strong id="eVal" th:text="${#numbers.formatDecimal(bewertung.getKriterium4(), 0, 0)}">0</strong></span>
+                        <i class="far fa-question-circle d-none d-md-inline ml-4" data-toggle="tooltip" data-placement="top" title="Beschreibung"></i>
+                    </div>
+                </div>
+                <div class="form-group mt-3 row">
+                    <div class="col-xs-12 col-sm col-lg-4">
+                        <div class="d-sm-flex flex-row justify-content-between align-items-center">
+                            <span>Kriterium5</span>
+                        </div>
+                    </div>
+                    <div class="col col-sm-6">
+                        <input id="k" type="text" th:field="*{kriterium5}" data-slider-min="0"
+                               data-slider-max="5"
+                               data-slider-step="1"
+                               th:attr="data-slider-value=${bewertung.getKriterium5()}" class="rating"/>
+                        <span class="ml-2"><strong id="kVal" th:text="${#numbers.formatDecimal(bewertung.getKriterium5(), 0, 0)}">0</strong></span>
+                        <i class="far fa-question-circle d-none d-md-inline ml-4" data-toggle="tooltip" data-placement="top" title="Beschreibung"></i>
+                    </div>
+                </div>
+                <div class="form-group mt-3 row">
+                    <div class="col-xs-12 col-sm col-lg-4">
+                        <div class="d-sm-flex flex-row justify-content-between align-items-center">
+                            <span>Kriterium6</span>
+                        </div>
+                    </div>
+                    <div class="col col-sm-6">
+                        <input id="r" type="text" th:field="*{kriterium6}" data-slider-min="0" data-slider-max="5"
+                               data-slider-step="1"
+                               th:attr="data-slider-value=${bewertung.getKriterium6()}" class="rating"/>
+                        <span class="ml-2"><strong id="rVal" th:text="${#numbers.formatDecimal(bewertung.getKriterium6(), 0, 0)}">0</strong></span>
+                        <i class="far fa-question-circle d-none d-md-inline ml-4" data-toggle="tooltip" data-placement="top" title="Beschreibung"></i>
+                    </div>
+                </div>
+                <div class="form-group mt-3 row">
+                    <div class="col-xs-12 col-sm col-lg-4">
+                        <div class="d-sm-flex flex-row justify-content-between align-items-center">
+                            <span>Kriterium7</span>
+                        </div>
+                    </div>
+                    <div class="col col-sm-6">
+                        <input id="wp" type="text" th:field="*{kriterium7}" data-slider-min="0"
+                               data-slider-max="5"
+                               data-slider-step="1"
+                               th:attr="data-slider-value=${bewertung.getKriterium7()}" class="rating"/>
+                        <span class="ml-2"><strong id="wpVal" th:text="${#numbers.formatDecimal(bewertung.getKriterium7(), 0, 0)}">0</strong></span>
+                        <i class="far fa-question-circle d-none d-md-inline ml-4" data-toggle="tooltip" data-placement="top" title="Beschreibung"></i>
+                    </div>
+                </div>
+                <div class="form-group mt-3 row">
+                    <div class="col-xs-12 col-sm col-lg-4">
+                        <div class="d-sm-flex flex-row justify-content-between align-items-center">
+                            <span>Kriterium8</span>
+                        </div>
+                    </div>
+                    <div class="col col-sm-6">
+                        <input id="in" type="text" th:field="*{kriterium8}" data-slider-min="0"
+                               data-slider-max="5"
+                               data-slider-step="1"
+                               th:attr="data-slider-value=${bewertung.getKriterium8()}" class="rating"/>
+                        <span class="ml-2"><strong id="inVal" th:text="${#numbers.formatDecimal(bewertung.getKriterium8(), 0, 0)}">0</strong></span>
+                        <i class="far fa-question-circle d-none d-md-inline ml-4" data-toggle="tooltip" data-placement="top" title="Beschreibung"></i>
+                    </div>
+                </div>
+
+                <div class="form-group-row">
+                    <button type="submit" class="btn btn-primary col-sm-auto">Speichern</button>
+                </div>
+            </div>
+    </form>
+
+
+</div>
+
+
+
+<th:block th:replace="fragments :: scripts"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/11.0.2/bootstrap-slider.min.js"
+        integrity="sha512-f0VlzJbcEB6KiW8ZVtL+5HWPDyW1+nJEjguZ5IVnSQkvZbwBt2RfCBY0CBO1PsMAqxxrG4Di6TfsCPP3ZRwKpA=="
+        crossorigin="anonymous"></script>
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/11.0.2/css/bootstrap-slider.min.css"
+      integrity="sha512-3q8fi8M0VS+X/3n64Ndpp6Bit7oXSiyCnzmlx6IDBLGlY5euFySyJ46RUlqIVs0DPCGOypqP8IRk/EyPvU28mQ=="
+      crossorigin="anonymous"/>
+
+<script>
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    })
+
+
+    $(".rating").slider();
+    $(".rating").on("slide", function (slideEvt) {
+        $("#" + slideEvt.target.id + "Val").text(slideEvt.value);
+    });
+    $(".rating").on("change", function (slideEvt) {
+        $("#" + slideEvt.target.id + "Val").text(slideEvt.value.newValue);
+    });
+
+</script>
+
+</body>
+</html>

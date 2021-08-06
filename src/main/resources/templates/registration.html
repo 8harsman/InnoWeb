@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head >
+    <div th:replace="fragments :: header"></div>
+    <title>Registration InnoWeb</title>
+</head>
+
+<body>
+<div class="container-fluid">
+    <div class="row no-gutter">
+        <div class="d-none d-md-flex col-md-4 col-lg-6 bg-image"></div>
+        <div class="col-md-8 col-lg-6">
+            <div class="login d-flex align-items-center py-5">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-9 col-lg-8 mx-auto">
+                            <h3 class="login-heading mb-4">Erstelle deinen Account</h3>
+                            <form method="POST" class="form-signin" th:object="${userForm}" th:action="@{/7f7c2667b88a979e8cb91234da70f6ecc51a54d9a9a0541f4a27d5cf83a3ee41}">
+
+                                <div class="form-label-group">
+                                    <input id="inputVorname" type="text" th:field="*{vorname}" class="form-control" placeholder="Vorname" required autofocus>
+                                    <span class="has-error" th:if="${#fields.hasErrors('vorname')}" th:errors="*{vorname}"></span>
+                                    <label for="inputVorname">Vorname</label>
+                                </div>
+
+                                <div class="form-label-group">
+                                    <input id="inputNachname" type="text" th:field="*{nachname}" class="form-control" placeholder="Nachname" required>
+                                    <span class="has-error" th:if="${#fields.hasErrors('nachname')}" th:errors="*{nachname}"></span>
+                                    <label for="inputNachname">Nachname</label>
+                                </div>
+
+                                <div class="form-label-group">
+                                    <input id="inputUsername" type="text" th:field="*{username}" class="form-control" placeholder="E-Mail-Adresse" required>
+                                    <span class="has-error" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></span>
+                                    <label for="inputUsername">E-Mail-Adresse</label>
+                                </div>
+
+                                <div class="form-label-group">
+                                    <input id="inputPassword" type="password" th:field="*{password}" class="form-control" placeholder="Passwort" required>
+                                    <span class="has-error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
+                                    <label for="inputPassword">Passwort</label>
+                                </div>
+
+                                <div class="form-label-group">
+                                    <input id="inputConfirmPassword" type="password" th:field="*{passwordConfirm}" class="form-control" placeholder="Passwort bestätigen" required>
+                                    <span class="has-error" th:if="${#fields.hasErrors('passwordConfirm')}" th:errors="*{passwordConfirm}"></span>
+                                    <label for="inputConfirmPassword">Passwort bestätigen</label>
+                                </div>
+
+                                <button class="btn btn-lg btn-primary btn-block btn-login text-uppercase font-weight-bold mb-2" type="submit">Erstellen</button>
+
+                                <div class="text-center">
+                                    <p class="text-muted font-weight-bold">Du hast schon einen Account? <a th:href="@{/login}" class="text-primary ml-2">Login</a></p>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+<th:block th:replace="fragments :: scripts"/>
+</html>

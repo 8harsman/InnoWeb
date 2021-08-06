@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <div th:replace="fragments :: header"></div>
+    <title>Innovation hinzufügen</title>
+</head>
+<body>
+<div class="d-flex flex-column">
+    <div th:replace="fragments :: navbar"></div>
+
+    <div class="container">
+        <div class="display-4 text-center my-3">Neue Innovation hinzufügen</div>
+        <form method="post" th:action="@{/postInnovation}" th:object="${innovation}" enctype="multipart/form-data">
+            <div class="form-group row">
+                <label class="col-md-2 col-form-lable">Titel</label>
+                <div class="col-md-10">
+                    <input type="text" class="form-control" th:field="*{titel}" th:errorclass="is-invalid">
+                    <div class="text-danger small" th:errors="*{titel}"></div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-md-2 col-form-lable">Beschreibung</label>
+                <div class="col-md-10">
+                    <textarea class="form-control" th:field="*{beschreibung}" rows="10"></textarea>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-md-2 col-form-lable">Datei hochladen</label>
+                <div class="col-md-10">
+                    <p th:text="${message}" th:if="${message ne null}" class="alert alert-primary"></p>
+                    <div class="form-group">
+                        <input type="file" name="file" class="form-control-file">
+                    </div>
+                </div>
+            </div>
+            <div class="btn-toolbar float-right" role="toolbar" aria-label="Bewertung">
+                <div class="btn-group btn-group-md mr-1 mb-2 " role="group" aria-label="Bewerten">
+                    <button type="submit" class="btn btn-primary" name="action" value="bewerten"
+                            onclick="return confirm('Weiter zur Bewertung?');">Bewerten
+                    </button>
+                </div>
+                <div class="btn-group btn-group-md ml-1 mb-2" role="group" aria-label="Speichern und nicht Bewerten">
+                    <button type="submit" class="btn btn-primary" name="action" value="nicht bewerten"
+                            onclick="return confirm('Keine Bewertung angeben?');">Speichern &amp; nicht Bewerten
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<th:block th:replace="fragments :: scripts"/>
+<script>
+var submitted = false;
+var userinput = false;
+
+$(document).ready(function() {
+  $("form").submit(function() {
+    submitted = true;
+  });
+
+  $("input").change(function() {
+    userinput = true;
+  });
+
+  window.onbeforeunload = function () {
+    if (userinput && !submitted) {
+      return 'You do not have submitted the form yet.\
+      Do you really want to leave this page?';
+    }
+  }
+});
+
+</script>
+</body>
+</html>

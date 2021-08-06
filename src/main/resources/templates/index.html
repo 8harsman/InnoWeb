@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>InnoWeb</title>
+    <link rel="stylesheet" th:href="@{/generated/css/styles.css}">
+
+    <th:block th:replace="fragments :: scripts"/>
+
+
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/css/bootstrap-datepicker.min.css"/>
+
+
+    <script  type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.11/jquery.mask.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/js/bootstrap-datepicker.min.js"></script>
+
+    <script  type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+    <script  type="text/javascript" charset="utf8" src="https://cdn.datatables.net/datetime/1.1.0/js/dataTables.dateTime.min.js"></script>
+
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+</head>
+<body>
+<div th:replace="fragments :: navbar"></div>
+
+
+
+
+<div class="container"  align="center">
+
+    <h1 class="display-4 text-center mt-5">News Feed</h1>
+
+
+
+        <div>
+        <ul  th:if="${ereignisse.size > 0}" class="list-group mb-3" id="ereignisListe" >
+
+        </ul>
+
+        <button th:if="${ereignisse.size > 6}" type="button" class="btn btn-link" id="eintragButton"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+        </svg> </button>
+
+        <button th:if="${ereignisse.size > 6}" type="button" class="btn btn-link" id="eintragButtonUp"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-double-up" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M7.646 2.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 3.707 2.354 9.354a.5.5 0 1 1-.708-.708l6-6z"/>
+            <path fill-rule="evenodd" d="M7.646 6.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 7.707l-5.646 5.647a.5.5 0 0 1-.708-.708l6-6z"/>
+        </svg> </button>
+    </div>
+
+        <p th:unless="${ereignisse.size > 0}">Noch keine Einträge vorhanden</p>
+
+
+    <a id="filter_onpage">  <h1 class="display-4 text-center">Erfasste Innovationen</h1>
+    </a>
+
+
+
+    <div class="row mb-3" >
+
+        <div class="col-sm"></div> <div class="col-sm"> <input class="form-control mr-3 mt-3" type="text" name="SuchBox" id="SuchBox" placeholder="Titel/Beschreibung/Ersteller" ></div><div class="col-sm"></div>
+
+    </div>
+
+    <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#FilterContainer" aria-expanded="false" aria-controls="collapseExample">
+        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
+            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+            <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+        </svg>
+    </button>
+
+    <div class="collapse container" id="FilterContainer">
+
+
+    <div class="row mb-3" >
+
+        <div class="col-sm">  <label for="amount">Anzahl Bewertungen:</label> <input class="ml-3 mr-3" type="text" id="amount" size="5" readonly></div>
+        <div class="col-sm">    <div class="mt-3" id="slider-range" style="width: 300px; height: 10px"></div></div>
+        <div class="col-sm"></div>
+
+    </div>
+
+    <div class="row mb-3" >
+
+        <div class="col-sm">    <label for="amount2">Potenzial:</label>
+        <input class="ml-3 mr-3" type="text" id="amount2" size="5"  readonly></div>
+        <div class="col-sm">    <div class="mt-3" id="slider-range2" style="width: 300px; height: 10px"></div></div>
+        <div class="col-sm"></div>
+
+    </div>
+
+
+   <div class="row mb-3">
+                <div class="col-sm"></div>
+                <div class="col-sm">   <input type="text" class="form-control date-range-filter" placeholder="Frühestens" data-date-format="mm-dd-yyyy" id="minDatum" /></div>
+                <div class="col-sm"><input type="text" class="form-control date-range-filter" placeholder="Spätestens" data-date-format="mm-dd-yyyy" id="maxDatum"/></div>
+                <div class="col-sm"></div>
+    </div>
+
+
+    </div>
+
+
+
+
+    <table id="myTable" class="display" style="width:100%">
+        <thead>
+        <tr>
+            <th scope="col">Titel</th>
+            <th scope="col">Beschreibung</th>
+            <th scope="col">Potenzial</th>
+            <th scope="col">Bewertungen</th>
+            <th scope="col">Erfasser</th>
+            <th scope="col">Erfasst am</th>
+        </tr>
+
+
+        </thead>
+        <tbody>
+        <tr th:each="innovation : ${innovationen}" th:id="${innovation.id}" onclick="rowClicked(this.getAttribute('id'))" style="cursor : pointer">
+            <td> <span th:text="${innovation.titel}"></span> </td>
+            <td> <span th:text="${#strings.abbreviate(innovation.beschreibung, 25)}"></span> </td>
+            <td> <span th:text="${innovation.durchschnittsBewertung?.gesamtRating}"></span> </td>
+            <td> <span th:text="${innovation.getAnzahlBewertungen()}"></span> </td>
+            <td> <span th:text="${innovation.ersteller}"></span></td>
+            <td> <span th:text="${#dates.format(innovation.erstellungsdatum, 'dd.MM.yyyy')}"></span></td>
+        </tr>
+        </tbody>
+        <tfoot>
+
+
+        </tfoot>
+    </table>
+
+
+</div>
+
+<script type="text/javascript" th:src="@{/js/rangeSlider.js}"> </script>
+
+<script th:inline = "javascript">
+var ereignisse = /*[[${ereignisse}]]*/;
+</script>
+<script type="text/javascript" th:src="@{/js/newsFeed.js}"> </script>
+
+<script type="text/javascript" th:src="@{/js/filter.js}"> </script>
+
+<script>
+    function rowClicked(value) {
+        window.location.href = "details/" + value;
+    }
+</script>
+
+</body>
+
+
+</html>
